@@ -1,6 +1,6 @@
-package hotel;
+package business;
 
-public class Reservation {
-    private int res_num, order_id, room_num;
+public class Order {
+    private int order_id, cust_id;
     private String dates; //Change the dates later to a date class type object when it is done
 }

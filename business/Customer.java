@@ -1,4 +1,4 @@
-package hotel;
+package business;
 
 public class Customer extends Person {
     private int cust_id;
