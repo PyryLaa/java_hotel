@@ -1,5 +1,6 @@
 package business;
 import java.util.Scanner;
+import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
@@ -29,8 +30,8 @@ public class Main {
             e.printStackTrace();
         }
         
-        ArrayList<Customer> customers = new ArrayList<Customer>();
-        ArrayList<Employee> employees = new ArrayList<Employee>();
+        List<Customer> customers = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
 
         do{
             System.out.println("*****Welcome to Business!*****");
@@ -63,7 +64,7 @@ public class Main {
     }
 
 
-    static void new_customer(ArrayList<Customer> cust){
+    static void new_customer(List<Customer> cust){
         System.out.println("Welcome new customer to Business!");
         System.out.println("Please give your details so we can register you to the system.");
         System.out.println("Orders after this can be made from the returning customer\nmenu with your credentials.");
@@ -102,9 +103,16 @@ public class Main {
         System.out.println("Email: " + cust.get(index).getEmail());
         System.out.println("Phone: " + cust.get(index).getPhone());
         System.out.println("Your customer id: " + cust.get(index).getId());
+        try{
+            FileWriter cust_writer = new FileWriter("cust.txt");
+            cust_writer.close();
+        }catch(IOException e){
+            System.out.println("Error occurred!");
+            e.printStackTrace();
+        }
         
     }
-    static void ret_customer(ArrayList<Customer> cust){
+    static void ret_customer(List<Customer> cust){
         String un, pass;
         boolean valid = false;
         int index = -1; //-1 to check if username is found or not
@@ -132,7 +140,14 @@ public class Main {
         System.out.println("Welcome " + cust.get(index).getFname() + " " + cust.get(index).getLname() + " to Business!");
 
     }
-    static void emp(ArrayList<Employee> emp){
+    static void emp(List<Employee> emp){
         System.out.println("Hello, (employee name here)!");
+        try{
+            FileWriter emps_writer = new FileWriter("emps.txt");
+            emps_writer.close();
+        }catch(IOException e){
+            System.out.println("Error occurred!");
+            e.printStackTrace();
+        }
     }
 }
