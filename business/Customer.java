@@ -10,4 +10,7 @@ public class Customer extends Person {
     public int getId(){
         return cust_id;
     }
+    public String getValues(){
+        return cust_id + ", " + getFname() + ", " + getLname() + ", " + getUname() + ", " + getEmail() + ", " + getPhone() + ", " + getPassword();  
+    }
 }

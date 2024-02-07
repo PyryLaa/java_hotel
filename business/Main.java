@@ -1,9 +1,11 @@
 package business;
 import java.util.Scanner;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.Console;
 import java.io.IOException;
 
 
@@ -65,6 +67,7 @@ public class Main {
 
 
     static void new_customer(List<Customer> cust){
+        Console cons;
         System.out.println("Welcome new customer to Business!");
         System.out.println("Please give your details so we can register you to the system.");
         System.out.println("Orders after this can be made from the returning customer\nmenu with your credentials.");
@@ -86,14 +89,17 @@ public class Main {
         System.out.println("Give your phone number:");
         cust.get(index).setPhone(scan.nextLine());
 
-        System.out.println("Give a password:");
-        cust.get(index).setPassword(scan.nextLine());
+        if((cons = System.console()) != null){
+            char[] pass = cons.readPassword("%s", "Give Password: ");
+            char[] check_pass = cons.readPassword("%s", "Give password again:");
 
-        System.out.println("Give password again:");
-        String check_pass = scan.nextLine();
-        while(!(cust.get(index).getPassword().equals(check_pass))){ //If the wrong password is given the second time
-            System.out.println("Wrong password given, please type again:");
-            check_pass = scan.nextLine();
+            while(!(Arrays.equals(check_pass, pass))){
+                System.out.println("Please check that passwords match");
+                check_pass = cons.readPassword("%s", "Give password again:");
+            }
+            cust.get(index).setPassword(String.valueOf(pass));
+        }else{
+            System.out.println("Console error");
         }
 
         System.out.println("\n*****Your credentials are*****");
@@ -105,22 +111,28 @@ public class Main {
         System.out.println("Your customer id: " + cust.get(index).getId());
         try{
             FileWriter cust_writer = new FileWriter("cust.txt");
+            cust_writer.append(cust.get(index).getValues());
             cust_writer.close();
         }catch(IOException e){
-            System.out.println("Error occurred!");
+            System.out.println("Error occurred when writing!");
             e.printStackTrace();
         }
         
     }
     static void ret_customer(List<Customer> cust){
-        String un, pass;
+        String un;
+        char[] pass = null;
         boolean valid = false;
         int index = -1; //-1 to check if username is found or not
+        Console cons;
         do{
             System.out.println("Username: ");
             un = scan.nextLine();
-            System.out.println("Password: ");
-            pass = scan.nextLine();
+            if((cons = System.console()) != null){
+                pass = cons.readPassword("%s", "Password: ");
+            }else{
+                System.out.println("Console error!");
+            }
             for(int i = 0; i < cust.size(); i++){ //Check if the username is found
                 if(cust.get(i).getUname().equals(un)){
                     index = i;
@@ -130,7 +142,7 @@ public class Main {
             if(index == -1){
                 System.out.println("Username not found!");
             }else{
-                if(!(cust.get(index).getPassword().equals(pass))){
+                if(!(cust.get(index).getPassword().equals(String.valueOf(pass)))){
                     System.out.println("Invalid password!");
                 }else{
                     valid = true;
